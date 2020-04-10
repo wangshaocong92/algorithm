@@ -1,7 +1,4 @@
-#ifndef HEAP_H
-#define HEAP_H
-#include <iostream>
-
+#pragma once
 const int min = 10;
 enum Type { Min, Max };
 template <class T>
@@ -11,19 +8,21 @@ public:
     // 为真取前一个
     typedef bool (*Func)(T &t1, T &t2);
     Heap();
-
+    ~Heap();
+    inline void registerFunc(Func f) { campare = f; }
     void setType(Type t);
     Type type();
-
-    inline void registerFunc(Func f) { campare = f; }
-
     void build(T *t, int length);
     void insert(T t);
-
-    T *heap();
     T del();
-
+    T *heap();
     T head();
+    int length();
+
+    void operator<<(T t);
+    void operator>>(T &t);
+    void operator+(T t);
+    T operator[](int index);
 
 private:
     T *tArray = nullptr;
@@ -31,7 +30,6 @@ private:
     int currentCap;
     Func campare;
     Type t;
-
     void swap(T *first, T *secend)
     {
         auto tem = *first;
@@ -44,6 +42,13 @@ private:
 template <class T>
 Heap<T>::Heap()
 {
+}
+
+template <class T>
+Heap<T>::~Heap()
+{
+    if (!tArray)
+        delete tArray;
 }
 template <class T>
 void Heap<T>::setType(Type t)
@@ -182,10 +187,38 @@ T Heap<T>::head()
 }
 
 template <class T>
+int Heap<T>::length()
+{
+    return currentLength;
+}
+
+template <class T>
+void Heap<T>::operator<<(T t)
+{
+    insert(t);
+}
+
+template <class T>
+void Heap<T>::operator>>(T &t)
+{
+    t = del();
+}
+
+template <class T>
+void Heap<T>::operator+(T t)
+{
+    insert(t);
+}
+
+template <class T>
+T Heap<T>::operator[](int index)
+{
+    return tArray[index];
+}
+
+template <class T>
 void Heap<T>::copy(T *copy, T *copied, int len)
 {
     for (auto i = 0; i < len; i++)
         copied[i] = copy[i];
 }
-
-#endif // HEAP_H
