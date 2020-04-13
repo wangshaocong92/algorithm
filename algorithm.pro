@@ -1,2 +1,3 @@
 TEMPLATE = subdirs
-SUBDIRS = heap
+SUBDIRS = heap \
+    RBTree
